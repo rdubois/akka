@@ -83,7 +83,7 @@ trait PersistenceIdentity {
   def persistenceId: String
 
   /**
-   * Configuration id of the journal plugin servicing this persistent actor or view.
+   * Configuration id of the journal plugin servicing this persistent actor.
    * When empty, looks in `akka.persistence.journal.plugin` to find configuration entry path.
    * When configured, uses `journalPluginId` as absolute path to the journal configuration entry.
    * Configuration entry must contain few required fields, such as `class`. See `src/main/resources/reference.conf`.
@@ -91,7 +91,7 @@ trait PersistenceIdentity {
   def journalPluginId: String = ""
 
   /**
-   * Configuration id of the snapshot plugin servicing this persistent actor or view.
+   * Configuration id of the snapshot plugin servicing this persistent actor.
    * When empty, looks in `akka.persistence.snapshot-store.plugin` to find configuration entry path.
    * When configured, uses `snapshotPluginId` as absolute path to the snapshot store configuration entry.
    * Configuration entry must contain few required fields, such as `class`. See `src/main/resources/reference.conf`.
@@ -99,13 +99,25 @@ trait PersistenceIdentity {
   def snapshotPluginId: String = ""
 
   /**
-   * @return
+   * Additional configuration of the journal plugin servicing this persistent actor.
+   * When empty, the whole configuration of the journal plugin will be taken from the [[Config]] loaded into the
+   * [[ActorSystem]].
+   * When configured, the journal plugin configuration will be taken from this [[Config]] merged with the [[Config]]
+   * loaded into the [[ActorSystem]].
+   *
+   * @return an additional configuration used to configure the journal plugin.
    */
   def journalPluginConfig: Config = ConfigFactory.empty
 
   /**
-   * @return
-   */
+    * Additional configuration of the snapshot plugin servicing this persistent actor.
+    * When empty, the whole configuration of the snapshot plugin will be taken from the [[Config]] loaded into the
+    * [[ActorSystem]].
+    * When configured, the snapshot plugin configuration will be taken from this [[Config]] merged with the [[Config]]
+    * loaded into the [[ActorSystem]].
+    *
+    * @return an additional configuration used to configure the snapshot plugin.
+    */
   def snapshotPluginConfig: Config = ConfigFactory.empty
 
 }
@@ -295,15 +307,15 @@ class Persistence(val system: ExtendedActorSystem) extends Extension {
     pluginHolderFor(configPath, snapshotStoreFallbackConfigPath, snapshotPluginConfig).actor
   }
 
-  @tailrec private def pluginHolderFor(configPath: String, fallbackPath: String, config: Config): PluginHolder = {
+  @tailrec private def pluginHolderFor(configPath: String, fallbackPath: String, additionalConfig: Config): PluginHolder = {
     val extensionIdMap = pluginExtensionId.get
     extensionIdMap.get(configPath) match {
       case Some(extensionId) ⇒
         extensionId(system)
       case None ⇒
-        val extensionId = new PluginHolderExtensionId(configPath, fallbackPath, config)
+        val extensionId = new PluginHolderExtensionId(configPath, fallbackPath, additionalConfig)
         pluginExtensionId.compareAndSet(extensionIdMap, extensionIdMap.updated(configPath, extensionId))
-        pluginHolderFor(configPath, fallbackPath, config) // Recursive invocation.
+        pluginHolderFor(configPath, fallbackPath, additionalConfig) // Recursive invocation.
     }
   }
 
@@ -333,8 +345,8 @@ class Persistence(val system: ExtendedActorSystem) extends Extension {
     system.systemActorOf(pluginActorProps, pluginActorName)
   }
 
-  private def createAdapters(configPath: String, config: Config): EventAdapters = {
-    val pluginConfig = config.withFallback(system.settings.config).getConfig(configPath)
+  private def createAdapters(configPath: String, additionalConfig: Config): EventAdapters = {
+    val pluginConfig = additionalConfig.withFallback(system.settings.config).getConfig(configPath)
     EventAdapters(system, pluginConfig)
   }
 
