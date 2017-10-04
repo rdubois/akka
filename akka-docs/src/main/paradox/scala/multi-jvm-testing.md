@@ -21,7 +21,7 @@ You can specify JVM options for the forked JVMs:
 jvmOptions in MultiJvm := Seq("-Xmx256M")
 ```
 
-Here is an example of a @extref[sample project](samples:tree/master/akka-sample-multi-node-scala) that uses the `sbt-multi-jvm` plugin.
+Here is an example of a @extref[sample project](samples:akka-sample-multi-node-scala) that uses the `sbt-multi-jvm` plugin.
 
 ## Running tests
 
@@ -76,7 +76,7 @@ forked JVM.
 So to create a 3-node test called `Sample`, you can create three applications
 like the following:
 
-```
+```scala
 package sample
 
 object SampleMultiJvmNode1 {
@@ -165,7 +165,7 @@ do this use the same naming convention as above, but create ScalaTest suites
 rather than objects with main methods. You need to have ScalaTest on the
 classpath. Here is a similar example to the one above but using ScalaTest:
 
-```
+```scala
 package sample
 
 import org.scalatest.WordSpec

@@ -290,7 +290,7 @@ Java
 :   @@snip [TwitterStreamQuickstartDocTest.java]($code$/java/jdocs/stream/TwitterStreamQuickstartDocTest.java) { #authors-foreach-println }
 
 Materializing and running a stream always requires a `Materializer` to be @scala[in implicit scope (or passed in explicitly,
-like this: `.run(materializer)`)]@java[to be passed in explicitly, like this: `.run(mat)`].
+like this: `.run(materializer)`)]@java[passed in explicitly, like this: `.run(mat)`].
 
 The complete snippet looks like this:
 
@@ -381,7 +381,7 @@ Scala
 :   @@snip [TwitterStreamQuickstartDocSpec.scala]($code$/scala/docs/stream/TwitterStreamQuickstartDocSpec.scala) { #tweets-slow-consumption-dropHead }
 
 Java
-:  @@snip [TwitterStreamQuickstartDocTest.java]($code$/java/jdocs/stream/TwitterStreamQuickstartDocTest.java) { #tweets-slow-consumption-dropHead } 
+:  @@snip [TwitterStreamQuickstartDocTest.java]($code$/java/jdocs/stream/TwitterStreamQuickstartDocTest.java) { #tweets-slow-consumption-dropHead }
 
 The `buffer` element takes an explicit and required `OverflowStrategy`, which defines how the buffer should react
 when it receives another element while it is full. Strategies provided include dropping the oldest element (`dropHead`),
@@ -412,7 +412,7 @@ prepared Sink using `toMat`]@java[`Sink.fold` will sum all `Integer` elements of
 a `CompletionStage<Integer>`. Next we use the `map` method of `tweets` `Source` which will change each incoming tweet
 into an integer value `1`.  Finally we connect the Flow to the previously prepared Sink using `toMat`].
 
-Remember those mysterious `Mat` type parameters on @scala[``Source[+Out, +Mat]``, `Flow[-In, +Out, +Mat]` and `Sink[-In, +Mat]`]@java[``Source<Out, Mat>``, `Flow<In, Out, Mat>` and `Sink<In, Mat>`]?
+Remember those mysterious `Mat` type parameters on @scala[`Source[+Out, +Mat]`, `Flow[-In, +Out, +Mat]` and `Sink[-In, +Mat]`]@java[`Source<Out, Mat>`, `Flow<In, Out, Mat>` and `Sink<In, Mat>`]?
 They represent the type of values these processing parts return when materialized. When you chain these together,
 you can explicitly combine their materialized values. In our example we used the @scala[`Keep.right`]@java[`Keep.right()`] predefined function,
 which tells the implementation to only care about the materialized type of the stage currently appended to the right.

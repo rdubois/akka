@@ -50,7 +50,7 @@ LevelDB based plugins will require the following additional dependency declarati
 sbt
 :   @@@vars
     ```
-    "org.iq80.leveldb"            % "leveldb"          % "0.7"
+    "org.iq80.leveldb"            % "leveldb"          % "0.9"
     "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8"
     ```
     @@@
@@ -58,7 +58,7 @@ sbt
 Gradle
 :   @@@vars
     ```
-    compile group: 'org.iq80.leveldb', name: 'leveldb', version: '0.7'
+    compile group: 'org.iq80.leveldb', name: 'leveldb', version: '0.9'
     compile group: 'org.fusesource.leveldbjni', name: 'leveldbjni-all', version: '1.8' 
     ```
     @@@
@@ -69,7 +69,7 @@ Maven
     <dependency>
       <groupId>org.iq80.leveldb</groupId>
       <artifactId>leveldb</artifactId>
-      <version>0.7</version>
+      <version>0.9</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
@@ -1235,7 +1235,7 @@ LevelDB based plugins will also require the following additional dependency decl
 sbt
 :   @@@vars
     ```
-    "org.iq80.leveldb"            % "leveldb"          % "0.7"
+    "org.iq80.leveldb"            % "leveldb"          % "0.9"
     "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8"
     ```
     @@@
@@ -1243,7 +1243,7 @@ sbt
 Gradle
 :   @@@vars
     ```
-    compile group: 'org.iq80.leveldb', name: 'leveldb', version: '0.7'
+    compile group: 'org.iq80.leveldb', name: 'leveldb', version: '0.9'
     compile group: 'org.fusesource.leveldbjni', name: 'leveldbjni-all', version: '1.8' 
     ```
     @@@
@@ -1254,7 +1254,7 @@ Maven
     <dependency>
       <groupId>org.iq80.leveldb</groupId>
       <artifactId>leveldb</artifactId>
-      <version>0.7</version>
+      <version>0.9</version>
     </dependency>
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
@@ -1270,6 +1270,13 @@ directory. This location can be changed by configuration where the specified pat
 @@snip [PersistencePluginDocSpec.scala]($code$/scala/docs/persistence/PersistencePluginDocSpec.scala) { #journal-config }
 
 With this plugin, each actor system runs its own private LevelDB instance.
+
+One peculiarity of LevelDB is that the deletion operation does not remove messages from the journal, but adds 
+a "tombstone" for each deleted message instead. In the case of heavy journal usage, especially one including frequent 
+deletes, this may be an issue as users may find themselves dealing with continuously increasing journal sizes. To 
+this end, LevelDB offers a special journal compaction function that is exposed via the following configuration:
+   
+@@snip [PersistencePluginDocSpec.scala]($code$/scala/docs/persistence/PersistencePluginDocSpec.scala) { #compaction-intervals-config }
 
 <a id="shared-leveldb-journal"></a>
 ### Shared LevelDB journal
