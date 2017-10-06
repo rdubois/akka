@@ -20,6 +20,7 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import akka.util.Timeout;
 
+import com.typesafe.config.ConfigFactory;
 import docs.persistence.query.MyEventsByTagPublisher;
 import org.reactivestreams.Subscriber;
 import scala.concurrent.duration.FiniteDuration;
@@ -210,7 +211,7 @@ public class PersistenceQueryDocTest {
     // obtain read journal by plugin id
     final MyJavadslReadJournal readJournal =
       PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-          "akka.persistence.query.my-read-journal");
+          "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
     // issue query to journal
     Source<EventEnvelope, NotUsed> source =
@@ -225,7 +226,7 @@ public class PersistenceQueryDocTest {
   void demonstrateAllPersistenceIdsLive() {
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
     //#all-persistence-ids-live
     readJournal.persistenceIds();
@@ -237,7 +238,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
     //#all-persistence-ids-snap
     readJournal.currentPersistenceIds();
@@ -249,7 +250,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
     //#events-by-persistent-id
     readJournal.eventsByPersistenceId("user-us-1337", 0L, Long.MAX_VALUE);
@@ -262,7 +263,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
     //#events-by-tag
     // assuming journal is able to work with numeric offsets we can:
@@ -291,7 +292,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
     //#advanced-journal-query-usage
 
@@ -327,7 +328,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
 
     //#projection-into-different-store-rs
@@ -360,7 +361,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
 
     //#projection-into-different-store-simple
@@ -403,7 +404,7 @@ public class PersistenceQueryDocTest {
 
     final MyJavadslReadJournal readJournal =
         PersistenceQuery.get(system).getReadJournalFor(MyJavadslReadJournal.class,
-            "akka.persistence.query.my-read-journal");
+            "akka.persistence.query.my-read-journal", ConfigFactory.empty());
 
 
     //#projection-into-different-store-actor-run

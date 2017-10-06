@@ -110,14 +110,14 @@ trait PersistenceIdentity {
   def journalPluginConfig: Config = ConfigFactory.empty
 
   /**
-    * Additional configuration of the snapshot plugin servicing this persistent actor.
-    * When empty, the whole configuration of the snapshot plugin will be taken from the [[Config]] loaded into the
-    * [[ActorSystem]].
-    * When configured, the snapshot plugin configuration will be taken from this [[Config]] merged with the [[Config]]
-    * loaded into the [[ActorSystem]].
-    *
-    * @return an additional configuration used to configure the snapshot plugin.
-    */
+   * Additional configuration of the snapshot plugin servicing this persistent actor.
+   * When empty, the whole configuration of the snapshot plugin will be taken from the [[Config]] loaded into the
+   * [[ActorSystem]].
+   * When configured, the snapshot plugin configuration will be taken from this [[Config]] merged with the [[Config]]
+   * loaded into the [[ActorSystem]].
+   *
+   * @return an additional configuration used to configure the snapshot plugin.
+   */
   def snapshotPluginConfig: Config = ConfigFactory.empty
 
 }
