@@ -7,6 +7,7 @@ package akka.persistence.query;
 import akka.NotUsed;
 import akka.actor.ActorSystem;
 import akka.testkit.AkkaJUnitActorSystemResource;
+import com.typesafe.config.ConfigFactory;
 import org.junit.ClassRule;
 
 
@@ -22,7 +23,7 @@ public class PersistenceQueryTest {
   @SuppressWarnings("unused")
   public void shouldExposeJavaDSLFriendlyQueryJournal() throws Exception {
     final DummyJavaReadJournal readJournal = PersistenceQuery.get(system).getReadJournalFor(DummyJavaReadJournal.class,
-        "noop-journal");
+        "noop-journal", ConfigFactory.empty());
     final akka.stream.javadsl.Source<String, NotUsed> ids = readJournal.persistenceIds();
   }
 }
