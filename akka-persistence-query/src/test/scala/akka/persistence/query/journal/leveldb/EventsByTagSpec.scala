@@ -52,7 +52,8 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
 
   implicit val mat = ActorMaterializer()(system)
 
-  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)
+  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](
+    LeveldbReadJournal.Identifier, system.settings.config)
 
   "Leveldb query EventsByTag" must {
     "implement standard EventsByTagQuery" in {

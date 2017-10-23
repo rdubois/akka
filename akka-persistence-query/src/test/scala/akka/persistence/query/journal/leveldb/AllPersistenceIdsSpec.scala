@@ -27,7 +27,8 @@ class AllPersistenceIdsSpec extends AkkaSpec(AllPersistenceIdsSpec.config)
 
   implicit val mat = ActorMaterializer()(system)
 
-  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)
+  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](
+    LeveldbReadJournal.Identifier, system.settings.config)
 
   "Leveldb query AllPersistenceIds" must {
 

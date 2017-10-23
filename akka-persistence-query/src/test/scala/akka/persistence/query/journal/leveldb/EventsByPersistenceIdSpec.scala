@@ -29,7 +29,8 @@ class EventsByPersistenceIdSpec extends AkkaSpec(EventsByPersistenceIdSpec.confi
 
   implicit val mat = ActorMaterializer()(system)
 
-  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)
+  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](
+    LeveldbReadJournal.Identifier, system.settings.config)
 
   def setup(persistenceId: String): ActorRef = {
     val ref = setupEmpty(persistenceId)
