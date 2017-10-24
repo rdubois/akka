@@ -1215,7 +1215,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
 
       expectMsg("x-a-1")
       expectMsg("x-b-2")
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "support calling persistAll with Nil" in {
       val persistentActor = persistAllNilPersistentActor
@@ -1246,7 +1246,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       expectMsg("c-ea2-8")
       expectMsg("c-e3-9")
 
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "support a mix of persist calls (sync, async) and persist calls" in {
       val persistentActor = asyncPersistAndPersistMixedSyncAsyncPersistentActor
@@ -1269,7 +1269,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       expectMsg("c-e1-5")
       expectMsg("c-ea2-6")
 
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "correlate persistAsync handlers after restart" in {
       val persistentActor = asyncPersistHandlerCorrelationCheck
@@ -1286,7 +1286,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       expectMsg("a-2")
       expectMsg("d-3")
       expectMsg("d-4")
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "allow deferring handlers in order to provide ordered processing in respect to asyncPersist handlers" in {
       val persistentActor = deferringWithAsyncPersistActor
@@ -1295,7 +1295,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       expectMsg("pa-a-2")
       expectMsg("d-a-3")
       expectMsg("d-a-4")
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "invoke deferred handlers, in presence of mixed a long series persist / persistAsync calls" in {
       val persistentActor = deferringMixedCallsPPADDPADPersistActor
@@ -1317,7 +1317,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       p2.expectMsg("pa-b-5")
       p2.expectMsg("d-b-6")
 
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "invoke deferred handlers right away, if there are no pending persist handlers registered" in {
       val persistentActor = deferringWithNoPersistCallsPersistActor
@@ -1325,7 +1325,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       expectMsg("d-1")
       expectMsg("d-2")
       expectMsg("d-3")
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "invoke deferred handlers, preserving the original sender references" in {
       val persistentActor = deferringWithAsyncPersistActor
@@ -1342,7 +1342,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       p2.expectMsg("pa-b-2")
       p2.expectMsg("d-b-3")
       p2.expectMsg("d-b-4")
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "receive RecoveryFinished if it is handled after all events have been replayed" in {
       val persistentActor1 = snapshottingPersistentActor
@@ -1399,7 +1399,7 @@ abstract class PersistentActorSpec(config: Config) extends PersistenceSpec(confi
       expectMsg("base aroundPostStop")
       expectMsg("postStop")
 
-      expectNoMsg(100.millis)
+      expectNoMessage(100.millis)
     }
     "allow multiple persists with nested persist calls" in {
       val persistentActor = multipleAndNestedPersists
@@ -1553,7 +1553,7 @@ class LeveldbPersistentActorWithProvidedConfigSpec extends PersistentActorSpec(
     ).withValue(
       "custom.persistence.snapshot-store.local",
       system.settings.config.getValue("akka.persistence.snapshot-store.local")
-    ).withFallback(system.settings.config)
+    )
   }
 
   override protected def behavior1PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior1PersistentActorWithLevelDbProvidedConfig](providedActorConfig)
@@ -1644,75 +1644,74 @@ class InmemPersistentActorWithProvidedConfigSpec extends PersistentActorSpec(
     ).withValue(
       "custom.persistence.snapshot-store.local",
       system.settings.config.getValue("akka.persistence.snapshot-store.local")
-    ).withFallback(system.settings.config)
+    )
   }
 
-override protected def behavior1PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior1PersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def behavior1PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior1PersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def behavior2PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior2PersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def behavior2PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior2PersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def behavior3PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior3PersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def behavior3PersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[Behavior3PersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def changeBehaviorInFirstEventHandlerPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInFirstEventHandlerPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def changeBehaviorInFirstEventHandlerPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInFirstEventHandlerPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def changeBehaviorInLastEventHandlerPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInLastEventHandlerPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def changeBehaviorInLastEventHandlerPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInLastEventHandlerPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def changeBehaviorInCommandHandlerFirstPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInCommandHandlerFirstPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def changeBehaviorInCommandHandlerFirstPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInCommandHandlerFirstPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def changeBehaviorInCommandHandlerLastPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInCommandHandlerLastPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def changeBehaviorInCommandHandlerLastPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ChangeBehaviorInCommandHandlerLastPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def snapshottingPersistentActor: ActorRef = system.actorOf(Props(classOf[SnapshottingPersistentActorWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def snapshottingPersistentActor: ActorRef = system.actorOf(Props(classOf[SnapshottingPersistentActorWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def snapshottingBecomingPersistentActor: ActorRef = system.actorOf(Props(classOf[SnapshottingBecomingPersistentActorWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def snapshottingBecomingPersistentActor: ActorRef = system.actorOf(Props(classOf[SnapshottingBecomingPersistentActorWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def replyInEventHandlerPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ReplyInEventHandlerPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def replyInEventHandlerPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[ReplyInEventHandlerPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def anyValEventPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AnyValEventPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def anyValEventPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AnyValEventPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def asyncPersistPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def asyncPersistPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def asyncPersistThreeTimesPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistThreeTimesPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def asyncPersistThreeTimesPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistThreeTimesPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def asyncPersistSameEventTwicePersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistSameEventTwicePersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def asyncPersistSameEventTwicePersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistSameEventTwicePersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def persistAllNilPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[PersistAllNilPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def persistAllNilPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[PersistAllNilPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def asyncPersistAndPersistMixedSyncAsyncSyncPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistAndPersistMixedSyncAsyncSyncPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def asyncPersistAndPersistMixedSyncAsyncSyncPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistAndPersistMixedSyncAsyncSyncPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def asyncPersistAndPersistMixedSyncAsyncPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistAndPersistMixedSyncAsyncPersistentActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def asyncPersistAndPersistMixedSyncAsyncPersistentActor: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistAndPersistMixedSyncAsyncPersistentActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def asyncPersistHandlerCorrelationCheck: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistHandlerCorrelationCheckWithInmemProvidedConfig](providedActorConfig)
+  override protected def asyncPersistHandlerCorrelationCheck: ActorRef = namedPersistentActorWithProvidedConfig[AsyncPersistHandlerCorrelationCheckWithInmemProvidedConfig](providedActorConfig)
 
-override protected def deferringWithPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringWithPersistActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def deferringWithPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringWithPersistActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def deferringWithAsyncPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringWithAsyncPersistActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def deferringWithAsyncPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringWithAsyncPersistActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def deferringMixedCallsPPADDPADPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringMixedCallsPPADDPADPersistActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def deferringMixedCallsPPADDPADPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringMixedCallsPPADDPADPersistActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def deferringWithNoPersistCallsPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringWithNoPersistCallsPersistActorWithInmemProvidedConfig](providedActorConfig)
+  override protected def deferringWithNoPersistCallsPersistActor: ActorRef = namedPersistentActorWithProvidedConfig[DeferringWithNoPersistCallsPersistActorWithInmemProvidedConfig](providedActorConfig)
 
-override protected def handleRecoveryFinishedEventPersistentActor: ActorRef = system.actorOf(Props(classOf[HandleRecoveryFinishedEventPersistentActorWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def handleRecoveryFinishedEventPersistentActor: ActorRef = system.actorOf(Props(classOf[HandleRecoveryFinishedEventPersistentActorWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def stressOrdering: ActorRef = namedPersistentActorWithProvidedConfig[StressOrderingWithInmemProvidedConfig](providedActorConfig)
+  override protected def stressOrdering: ActorRef = namedPersistentActorWithProvidedConfig[StressOrderingWithInmemProvidedConfig](providedActorConfig)
 
-override protected def stackableTestPersistentActor: ActorRef = system.actorOf(Props(classOf[StackableTestPersistentActorWithInmemProvidedConfig], testActor, providedActorConfig))
+  override protected def stackableTestPersistentActor: ActorRef = system.actorOf(Props(classOf[StackableTestPersistentActorWithInmemProvidedConfig], testActor, providedActorConfig))
 
-override protected def multipleAndNestedPersists: ActorRef = system.actorOf(Props(classOf[MultipleAndNestedPersistsWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def multipleAndNestedPersists: ActorRef = system.actorOf(Props(classOf[MultipleAndNestedPersistsWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def multipleAndNestedPersistAsyncs: ActorRef = system.actorOf(Props(classOf[MultipleAndNestedPersistAsyncsWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def multipleAndNestedPersistAsyncs: ActorRef = system.actorOf(Props(classOf[MultipleAndNestedPersistAsyncsWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def deeplyNestedPersists(nestedPersists: Int): ActorRef = system.actorOf(Props(classOf[DeeplyNestedPersistsWithInmemProvidedConfig], name, nestedPersists, testActor, providedActorConfig))
+  override protected def deeplyNestedPersists(nestedPersists: Int): ActorRef = system.actorOf(Props(classOf[DeeplyNestedPersistsWithInmemProvidedConfig], name, nestedPersists, testActor, providedActorConfig))
 
-override protected def deeplyNestedPersistAsyncs(nestedPersistAsyncs: Int): ActorRef = system.actorOf(Props(classOf[DeeplyNestedPersistAsyncsWithInmemProvidedConfig], name, nestedPersistAsyncs, testActor, providedActorConfig))
+  override protected def deeplyNestedPersistAsyncs(nestedPersistAsyncs: Int): ActorRef = system.actorOf(Props(classOf[DeeplyNestedPersistAsyncsWithInmemProvidedConfig], name, nestedPersistAsyncs, testActor, providedActorConfig))
 
-override protected def nestedPersistNormalAndAsyncs: ActorRef = system.actorOf(Props(classOf[NestedPersistNormalAndAsyncsWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def nestedPersistNormalAndAsyncs: ActorRef = system.actorOf(Props(classOf[NestedPersistNormalAndAsyncsWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def nestedPersistAsyncsAndNormal: ActorRef = system.actorOf(Props(classOf[NestedPersistAsyncsAndNormalWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def nestedPersistAsyncsAndNormal: ActorRef = system.actorOf(Props(classOf[NestedPersistAsyncsAndNormalWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def nestedPersistInAsyncEnforcesStashing: ActorRef = system.actorOf(Props(classOf[NestedPersistInAsyncEnforcesStashingWithInmemProvidedConfig], name, testActor, providedActorConfig))
+  override protected def nestedPersistInAsyncEnforcesStashing: ActorRef = system.actorOf(Props(classOf[NestedPersistInAsyncEnforcesStashingWithInmemProvidedConfig], name, testActor, providedActorConfig))
 
-override protected def persistInRecovery: ActorRef = namedPersistentActorWithProvidedConfig[PersistInRecoveryWithInmemProvidedConfig](providedActorConfig)
+  override protected def persistInRecovery: ActorRef = namedPersistentActorWithProvidedConfig[PersistInRecoveryWithInmemProvidedConfig](providedActorConfig)
 
-override protected def recoverMessageCausedRestart: ActorRef = namedPersistentActorWithProvidedConfig[RecoverMessageCausedRestartWithInmemProvidedConfig](providedActorConfig)
+  override protected def recoverMessageCausedRestart: ActorRef = namedPersistentActorWithProvidedConfig[RecoverMessageCausedRestartWithInmemProvidedConfig](providedActorConfig)
 }
-
