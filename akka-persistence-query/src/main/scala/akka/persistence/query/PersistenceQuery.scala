@@ -4,11 +4,13 @@
 package akka.persistence.query
 
 import java.util.concurrent.atomic.AtomicReference
+
 import akka.actor._
 import akka.event.Logging
+
 import scala.annotation.tailrec
 import scala.util.Failure
-import com.typesafe.config.Config
+import com.typesafe.config.{Config, ConfigFactory}
 
 /**
  * Persistence extension for queries.
@@ -42,7 +44,7 @@ class PersistenceQuery(system: ExtendedActorSystem) extends Extension {
    * Scala API: Returns the [[akka.persistence.query.scaladsl.ReadJournal]] specified by the given
    * read journal configuration entry.
    */
-  final def readJournalFor[T <: scaladsl.ReadJournal](readJournalPluginId: String, readJournalPluginConfig: Config): T =
+  final def readJournalFor[T <: scaladsl.ReadJournal](readJournalPluginId: String, readJournalPluginConfig: Config = ConfigFactory.empty()): T =
     readJournalPluginFor(readJournalPluginId, readJournalPluginConfig).scaladslPlugin.asInstanceOf[T]
 
   /**
@@ -51,6 +53,8 @@ class PersistenceQuery(system: ExtendedActorSystem) extends Extension {
    */
   final def getReadJournalFor[T <: javadsl.ReadJournal](clazz: Class[T], readJournalPluginId: String, readJournalPluginConfig: Config): T =
     readJournalPluginFor(readJournalPluginId, readJournalPluginConfig).javadslPlugin.asInstanceOf[T]
+
+  final def getReadJournalFor[T <: javadsl.ReadJournal](clazz: Class[T], readJournalPluginId: String): T = getReadJournalFor[T](clazz, readJournalPluginId, ConfigFactory.empty())
 
   @tailrec private def readJournalPluginFor(readJournalPluginId: String, readJournalPluginConfig: Config): PluginHolder = {
     val configPath = readJournalPluginId

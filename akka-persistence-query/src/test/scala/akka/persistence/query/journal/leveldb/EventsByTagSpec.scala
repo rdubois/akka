@@ -52,8 +52,7 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
 
   implicit val mat = ActorMaterializer()(system)
 
-  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](
-    LeveldbReadJournal.Identifier, system.settings.config)
+  val queries = PersistenceQuery(system).readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)
 
   "Leveldb query EventsByTag" must {
     "implement standard EventsByTagQuery" in {
@@ -79,7 +78,7 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
         .request(2)
         .expectNext(EventEnvelope(Sequence(1L), "a", 2L, "a green apple"))
         .expectNext(EventEnvelope(Sequence(2L), "a", 3L, "a green banana"))
-        .expectNoMsg(500.millis)
+        .expectNoMessage(500.millis)
         .request(2)
         .expectNext(EventEnvelope(Sequence(3L), "b", 2L, "a green leaf"))
         .expectComplete()
@@ -99,13 +98,13 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
         .request(2)
         .expectNext(EventEnvelope(Sequence(1L), "a", 2L, "a green apple"))
         .expectNext(EventEnvelope(Sequence(2L), "a", 3L, "a green banana"))
-        .expectNoMsg(100.millis)
+        .expectNoMessage(100.millis)
 
       c ! "a green cucumber"
       expectMsg(s"a green cucumber-done")
 
       probe
-        .expectNoMsg(100.millis)
+        .expectNoMessage(100.millis)
         .request(5)
         .expectNext(EventEnvelope(Sequence(3L), "b", 2L, "a green leaf"))
         .expectComplete() // green cucumber not seen
@@ -130,7 +129,7 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
       val probe = blackSrc.runWith(TestSink.probe[Any])
         .request(2)
         .expectNext(EventEnvelope(Sequence(1L), "b", 1L, "a black car"))
-        .expectNoMsg(100.millis)
+        .expectNoMessage(100.millis)
 
       d ! "a black dog"
       expectMsg(s"a black dog-done")
@@ -139,7 +138,7 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
 
       probe
         .expectNext(EventEnvelope(Sequence(2L), "d", 1L, "a black dog"))
-        .expectNoMsg(100.millis)
+        .expectNoMessage(100.millis)
         .request(10)
         .expectNext(EventEnvelope(Sequence(3L), "d", 2L, "a black night"))
     }
@@ -151,7 +150,7 @@ class EventsByTagSpec extends AkkaSpec(EventsByTagSpec.config)
         // note that banana is not included, since exclusive offset
         .expectNext(EventEnvelope(Sequence(3L), "b", 2L, "a green leaf"))
         .expectNext(EventEnvelope(Sequence(4L), "c", 1L, "a green cucumber"))
-        .expectNoMsg(100.millis)
+        .expectNoMessage(100.millis)
     }
 
   }

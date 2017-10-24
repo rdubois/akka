@@ -63,8 +63,7 @@ class PersistenceQuerySpec extends WordSpecLike with Matchers with BeforeAndAfte
     "throw if unable to find query journal by config key" in {
       withActorSystem() { system ⇒
         intercept[IllegalArgumentException] {
-          PersistenceQuery.get(system).readJournalFor[DummyReadJournal](
-            DummyReadJournal.Identifier + "-unknown", ConfigFactory.empty())
+          PersistenceQuery.get(system).readJournalFor[DummyReadJournal](DummyReadJournal.Identifier + "-unknown")
         }.getMessage should include("missing persistence read journal")
       }
     }
