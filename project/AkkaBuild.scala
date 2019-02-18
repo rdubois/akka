@@ -62,7 +62,7 @@ object AkkaBuild {
     UnidocRoot.akkaSettings ++
     Protobuf.settings ++ Seq(
       parallelExecution in GlobalScope := System.getProperty("akka.parallelExecution", parallelExecutionByDefault.toString).toBoolean,
-      version in ThisBuild := akkaVersion
+      version in ThisBuild := "2.5.31-talend"
     )
  
   lazy val mayChangeSettings = Seq(
